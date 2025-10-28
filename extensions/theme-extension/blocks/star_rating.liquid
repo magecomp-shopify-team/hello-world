@@ -1,0 +1,161 @@
+{% comment %} {% assign avg_rating = block.settings.product.metafields.demo.avg_rating.value | round %}
+<span style="color:{{ block.settings.colour }}">
+  {% render 'stars', rating: avg_rating %}
+</span>
+{% if avg_rating >= 4 %}
+<br>
+<img src="{{ " thumbs-up.png" | asset_img_url: '15x' }}" height="15" width="15" loading="lazy">
+{{ 'ratings.home.recommendationText' | t }}
+{% endif %} {% endcomment %}
+
+
+{% comment %}
+<img src="{{ " thumbs-up.png" | asset_img_url: '15x' }}" /> {% endcomment %}
+
+
+{% if product.metafields.custom.tech %}
+  {% assign tech_products_list = product.metafields.custom.tech.value %}
+
+  <style>
+    .recommended-products {
+      margin-top: 30px;
+      padding: 20px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .recommended-products h3 {
+      font-size: 1.25rem;
+      margin-bottom: 15px;
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .recommended-products-list {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .recommended-card {
+      flex-shrink: 0;
+      width: 200px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .recommended-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .recommended-card img {
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .recommended-card p {
+      font-size: 14px;
+      margin: 6px 0;
+      color: black;
+    }
+
+    .recommended-card strong {
+      font-size: 15px;
+      color: #111827;
+    }
+
+    .sale-badge {
+      display: inline-block;
+      background: wheat;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+
+    .recommended-card button {
+      margin-top: 10px;
+      background: #111827;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .recommended-card button:hover {
+      background: #374151;
+    }
+
+    .recommended-card span {
+      display: block;
+      margin-top: 5px;
+      font-size: 15px;
+      color:red;
+    }
+
+   
+    .recommended-products-list::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+
+  <div class="recommended-products">
+    <h3>Recommended similar Products</h3>
+
+    <div class="recommended-products-list">
+      {% for tech_product in tech_products_list %}
+
+        <div class="recommended-card">
+         <strong><span href="{{ tech_product.url }}" title="{{ tech_product.title }}">
+
+            {% if tech_product.featured_image %}
+              <img src="{{ tech_product.featured_image | image_url: width: 200 }}" 
+                   alt="{{ tech_product.title }}" 
+                   style="max-width: 100%; height: auto;">
+            {% endif %}
+            
+            <p>{{ tech_product.title }}</p>
+          </span></strong> 
+          <p><strong>{{ tech_product.price | money }}</strong></p>
+
+          {% if tech_product.compare_at_price > tech_product.price %}
+            <span>Sale!!</span>
+          {% endif %}
+
+          {% form 'product', tech_product %}
+            <input type="hidden" name="id" value="{{ tech_product.variants.first.id }}">
+            <button type="submit" name="add">Add to cart</button>
+          {% endform %}
+
+          {% unless tech_product.available %}
+            <span>Sold Out</span>
+          {% endunless %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+
+
+{% schema %}
+{
+"name": "Star Rating",
+"target": "section",
+
+}
+{% endschema %}

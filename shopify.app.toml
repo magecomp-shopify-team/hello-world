@@ -1,0 +1,20 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "e79d3a95116603eb0a0ced7966c28b51"
+name = "Demo-app-reactlaravel"
+application_url = "https://install-usual-march-reed.trycloudflare.com/"
+embedded = true
+
+[webhooks]
+api_version = "2025-07"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_products,write_products"
+optional_scopes = [ ]
+use_legacy_install_flow = false
+
+[auth]
+redirect_urls = [
+  "https://install-usual-march-reed.trycloudflare.com/authenticate"
+]
